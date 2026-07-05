@@ -2,8 +2,8 @@ const net = require('net');
 
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/personal_finance_db';
 
-if (mongoUri.startsWith('mongodb+srv://')) {
-    console.log('[wait-for-mongo] mongodb+srv:// URI detected. Skipping TCP port check for SRV record.');
+if (process.env.NODE_ENV === 'production' || mongoUri.startsWith('mongodb+srv://') || (!mongoUri.includes('localhost') && !mongoUri.includes('mongodb'))) {
+    console.log('[wait-for-mongo] Production mode, Atlas URI, or external host detected. Skipping TCP port check.');
     process.exit(0);
 }
 
