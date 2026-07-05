@@ -18,5 +18,5 @@ EXPOSE 5000
 ENV PORT=5000
 ENV NODE_ENV=production
 
-# Start backend application (waiting for MongoDB first)
-CMD ["sh", "-c", "node wait-for-mongo.js && node server.js"]
+# Start backend application
+CMD ["node", "server.js"]
