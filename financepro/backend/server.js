@@ -10,27 +10,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const connectDB = require('./config/db');
+
 // Database connection
-const MONGODB_URI = process.env.MONGODB_URI;
+connectDB();
 
-if (!MONGODB_URI) {
-    console.error('================================================================');
-    console.error('CRITICAL ERROR: MONGODB_URI environment variable is missing.');
-    console.error('The application requires a valid MongoDB connection string.');
-    console.error('Please configure MONGODB_URI in your environment variables.');
-    console.error('================================================================');
-    process.exit(1);
-}
-
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('Successfully connected to MongoDB database'))
-    .catch(err => {
-        console.error('================================================================');
-        console.error('FATAL DATABASE CONNECTION ERROR:', err.message);
-        console.error('Please verify your MONGODB_URI connection string and network access.');
-        console.error('================================================================');
-        process.exit(1);
-    });
 
 // Import routes
 const authRoutes = require('./routes/auth');
