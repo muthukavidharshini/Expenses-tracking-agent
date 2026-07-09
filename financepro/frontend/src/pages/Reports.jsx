@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Download, Loader, HelpCircle } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function Reports({ user, token }) {
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ function Reports({ user, token }) {
     setLoading(true);
     setAiSummary('');
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/financial-summary/${user.id}?month=${month}&year=${year}`, {
+      const res = await fetch(`${BACKEND_URL}/api/reports/financial-summary/${user.id}?month=${month}&year=${year}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -39,7 +41,7 @@ function Reports({ user, token }) {
   };
 
   const handleDownload = (format) => {
-    const url = `http://localhost:5000/api/reports/download/${user.id}?format=${format}`;
+    const url = `${BACKEND_URL}/api/reports/download/${user.id}?format=${format}`;
     // Trigger download
     const link = document.createElement('a');
     link.href = url;
@@ -52,7 +54,7 @@ function Reports({ user, token }) {
   const generateAiSummary = async () => {
     setLoadingAi(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/chatbot/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/${user.id}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

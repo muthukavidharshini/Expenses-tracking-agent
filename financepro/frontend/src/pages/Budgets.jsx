@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Loader, AlertTriangle, CheckCircle, Sparkles, X } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function Budgets({ user, token }) {
   const [analysisData, setAnalysisData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ function Budgets({ user, token }) {
   const fetchBudgetAnalysis = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/budget-analysis/${user.id}?month=${month}&year=${year}`, {
+      const res = await fetch(`${BACKEND_URL}/api/budget-analysis/${user.id}?month=${month}&year=${year}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -49,7 +51,7 @@ function Budgets({ user, token }) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/budget', {
+      const res = await fetch(`${BACKEND_URL}/api/budget`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -80,7 +82,7 @@ function Budgets({ user, token }) {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/budget/${currentBudget.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/budget/${currentBudget.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ function Budgets({ user, token }) {
   const handleDelete = async (budgetId) => {
     if (!window.confirm('Are you sure you want to delete this budget?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/budget/${budgetId}?user_id=${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/budget/${budgetId}?user_id=${user.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -130,7 +132,7 @@ function Budgets({ user, token }) {
 
   const getBudgetIdAndEdit = async (catName, budgetedVal) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/budget/${user.id}?month=${month}&year=${year}`, {
+      const res = await fetch(`${BACKEND_URL}/api/budget/${user.id}?month=${month}&year=${year}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -281,7 +283,7 @@ function Budgets({ user, token }) {
                             </button>
                             <button 
                               onClick={async () => {
-                                const res = await fetch(`http://localhost:5000/api/budget/${user.id}?month=${month}&year=${year}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                                const res = await fetch(`${BACKEND_URL}/api/budget/${user.id}?month=${month}&year=${year}`, { headers: { 'Authorization': `Bearer ${token}` } });
                                 const budgetList = await res.json();
                                 const bRecord = budgetList.data.budgets.find(b => b.category === catName);
                                 if (bRecord) handleDelete(bRecord.id);

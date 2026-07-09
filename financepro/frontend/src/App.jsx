@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 import {
   LayoutDashboard,
   TrendingUp,
@@ -100,7 +102,7 @@ function App() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notification/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/notification/${user.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await res.json();
@@ -114,7 +116,7 @@ function App() {
 
   const handleMarkAllRead = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notification/read-all/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/notification/read-all/${user.id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -180,7 +182,7 @@ function App() {
     e.preventDefault();
     try {
       const tagsArray = quickTags.split(',').map((t) => t.trim()).filter((t) => t !== '');
-      const res = await fetch('http://localhost:5000/api/expense', {
+      const res = await fetch(`${BACKEND_URL}/api/expense`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Loader } from 'lucide-react';
+import api, { getErrorMessage } from '../services/api';
 
 function Register({ onRegister, onSwitch }) {
   const [name, setName] = useState('');
@@ -16,14 +17,9 @@ function Register({ onRegister, onSwitch }) {
     setSuccess('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
+      const res = await api.post('/api/auth/signup', { name, email, password });
+      const data = res.data;
+      if (data.success) {
         setSuccess('Registration successful! Please login.');
         setTimeout(() => {
           onRegister();
@@ -33,7 +29,7 @@ function Register({ onRegister, onSwitch }) {
       }
     } catch (err) {
       console.error(err);
-      setError('Connection to server failed');
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

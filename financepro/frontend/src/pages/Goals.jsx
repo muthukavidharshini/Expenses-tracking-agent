@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit2, Target, Calendar, Loader, Award } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function Goals({ user, token }) {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ function Goals({ user, token }) {
   const fetchGoals = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/goal/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/goal/${user.id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -48,7 +50,7 @@ function Goals({ user, token }) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/goal', {
+      const res = await fetch(`${BACKEND_URL}/api/goal`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -80,7 +82,7 @@ function Goals({ user, token }) {
   const handleProgressSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/goal/${currentGoal._id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/goal/${currentGoal._id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ function Goals({ user, token }) {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this goal?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/goal/${id}?user_id=${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/goal/${id}?user_id=${user.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

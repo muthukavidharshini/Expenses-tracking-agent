@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Trash2, Edit2, Copy, Eye, Loader, ArrowLeft, ArrowRight, Sparkles, Receipt, Mic, DollarSign, X } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
   const fetchExpenses = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/expense/${user.id}?month=${month}&year=${year}&search=${search}&category=${category}&sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=10`, {
+      const res = await fetch(`${BACKEND_URL}/api/expense/${user.id}?month=${month}&year=${year}&search=${search}&category=${category}&sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&limit=10`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await res.json();
@@ -68,7 +70,7 @@ function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
     e.preventDefault();
     try {
       const tagsArray = tags.split(',').map((t) => t.trim()).filter((t) => t !== '');
-      const res = await fetch('http://localhost:5000/api/expense', {
+      const res = await fetch(`${BACKEND_URL}/api/expense`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +96,7 @@ function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
     e.preventDefault();
     try {
       const tagsArray = tags.split(',').map((t) => t.trim()).filter((t) => t !== '');
-      const res = await fetch(`http://localhost:5000/api/expense/${currentExpense.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/expense/${currentExpense.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +121,7 @@ function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this expense?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/expense/${id}?user_id=${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/expense/${id}?user_id=${user.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -137,7 +139,7 @@ function Expenses({ user, token, globalSearch = '', setGlobalSearch }) {
 
   const handleDuplicate = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/expense/duplicate/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/expense/duplicate/${id}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });

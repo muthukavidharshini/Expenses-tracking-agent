@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import CustomSelect from '../components/CustomSelect';
+
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 import {
   TrendingUp,
   TrendingDown,
@@ -47,7 +49,7 @@ function Dashboard({ user, token, setActivePage }) {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/dashboard/${user.id}?month=${month}&year=${year}`, {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/${user.id}?month=${month}&year=${year}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await res.json();

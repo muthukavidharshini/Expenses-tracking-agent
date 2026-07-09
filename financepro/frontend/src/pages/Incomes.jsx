@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Trash2, Edit2, Loader, ArrowLeft, ArrowRight, Sparkles, X } from 'lucide-react';
 import CustomSelect from '../components/CustomSelect';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function Incomes({ user, token }) {
   const [incomes, setIncomes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ function Incomes({ user, token }) {
   const fetchIncomes = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/income/${user.id}?month=${month}&year=${year}&search=${search}&category=${category}&page=${page}&limit=10`, {
+      const res = await fetch(`${BACKEND_URL}/api/income/${user.id}?month=${month}&year=${year}&search=${search}&category=${category}&page=${page}&limit=10`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -71,7 +73,7 @@ function Incomes({ user, token }) {
   const handleAddSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/income', {
+      const res = await fetch(`${BACKEND_URL}/api/income`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -102,7 +104,7 @@ function Incomes({ user, token }) {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/api/income/${currentIncome.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/income/${currentIncome.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -133,7 +135,7 @@ function Incomes({ user, token }) {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this income transaction?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/income/${id}?user_id=${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/income/${id}?user_id=${user.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

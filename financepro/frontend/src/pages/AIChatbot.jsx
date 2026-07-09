@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function AIChatbot({ user, token }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -78,7 +80,7 @@ function AIChatbot({ user, token }) {
 
   const fetchChatHistory = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/chatbot/history/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/history/${user.id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await res.json();
@@ -101,7 +103,7 @@ function AIChatbot({ user, token }) {
   const fetchInsightsAndForecast = async () => {
     setLoadingInsights(true);
     try {
-      const insRes = await fetch(`http://localhost:5000/api/chatbot/insights/${user.id}`, {
+      const insRes = await fetch(`${BACKEND_URL}/api/chatbot/insights/${user.id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const insResult = await insRes.json();
@@ -109,7 +111,7 @@ function AIChatbot({ user, token }) {
         setInsights(insResult.insights);
       }
 
-      const foreRes = await fetch(`http://localhost:5000/api/chatbot/predictions/${user.id}`, {
+      const foreRes = await fetch(`${BACKEND_URL}/api/chatbot/predictions/${user.id}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const foreResult = await foreRes.json();
@@ -133,7 +135,7 @@ function AIChatbot({ user, token }) {
     setLoadingChat(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/chatbot/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/${user.id}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -178,7 +180,7 @@ function AIChatbot({ user, token }) {
     setOcrResult(null);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/chatbot/ocr/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/ocr/${user.id}`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

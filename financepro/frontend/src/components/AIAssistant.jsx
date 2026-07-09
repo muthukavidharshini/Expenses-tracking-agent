@@ -12,6 +12,8 @@ import {
   BarChart3
 } from 'lucide-react';
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function AIAssistant({ user, token }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -44,8 +46,7 @@ function AIAssistant({ user, token }) {
     setInput('');
     setLoading(true);
 
-    try {
-      const res = await fetch(`http://localhost:5000/api/chatbot/${user.id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/chatbot/${user.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
