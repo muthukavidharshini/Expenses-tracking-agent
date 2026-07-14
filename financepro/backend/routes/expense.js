@@ -144,14 +144,16 @@ router.post("/expense", async (req, res) => {
       return res.status(400).json({ success: false, error: "Amount must be a positive number" })
     }
 
-    // Verify balance
+    // Verify balance (bypassed to allow logging expenses when balance is low)
     const currentBalance = await getCurrentBalance(user_id)
+    /*
     if (expenseAmount > currentBalance) {
       return res.status(400).json({
         success: false,
         error: `Insufficient balance. Current balance: ₹${currentBalance.toFixed(2)}, Expense amount: ₹${expenseAmount.toFixed(2)}`
       })
     }
+    */
 
     const newExpense = new Transaction({
       userId: user_id,
@@ -250,12 +252,14 @@ router.post("/expense/duplicate/:transactionId", async (req, res) => {
     }
 
     const currentBalance = await getCurrentBalance(originalTx.userId)
+    /*
     if (originalTx.amount > currentBalance) {
       return res.status(400).json({
         success: false,
         error: `Insufficient balance to duplicate this expense. Current balance: ₹${currentBalance.toFixed(2)}`
       })
     }
+    */
 
     const duplicatedTx = new Transaction({
       userId: originalTx.userId,
@@ -304,7 +308,8 @@ router.put("/expense/:transactionId", async (req, res) => {
       return res.status(400).json({ success: false, error: "Amount must be a positive number" })
     }
 
-    // Verify balance changes
+    // Verify balance changes (bypassed to allow updating expenses when balance is low)
+    /*
     if (newAmount !== oldAmount) {
       const currentBalance = await getCurrentBalance(user_id)
       const balanceAfterRevert = currentBalance + oldAmount // Add back old amount to check capacity
@@ -315,6 +320,7 @@ router.put("/expense/:transactionId", async (req, res) => {
         })
       }
     }
+    */
 
     if (category) expense.category = category
     if (amount !== undefined) expense.amount = newAmount
