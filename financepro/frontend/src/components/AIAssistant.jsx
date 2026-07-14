@@ -46,6 +46,7 @@ function AIAssistant({ user, token }) {
     setInput('');
     setLoading(true);
 
+    try {
       const res = await fetch(`${BACKEND_URL}/api/chatbot/${user.id}`, {
         method: 'POST',
         headers: {
